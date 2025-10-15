@@ -1,0 +1,2863 @@
+<source type="github_repository"><commit>152ce95e811a300e03ef05e6816797a9c339debf</commit>
+<file name="README.md">[![Video Thumbnail](https://img.youtube.com/vi/rir9B0ZShug/maxresdefault.jpg)](https://youtu.be/rir9B0ZShug)
+
+# Build an AI Agent with Django, LangGraph, and Permit
+
+
+[Watch now on YouTube](https://youtu.be/rir9B0ZShug)
+
+Django has the data. LangGraph coordinates the Ai Agents. Permit gives us the guardrails to ensure data is safe.
+
+In this course, I'll take you step-by-step so you can build Ai Agents with Django, LangGraph, and Permit so you can:
+
+✅ Save user-data with minimal overhead
+
+✅ Talk to the data you or your users care about
+
+✅ Integrate third-party rest API services
+
+✅ Turn any Python functions into tools an Ai Agent can run with queries like 'what are my recent documents?' or 'What new movies are out?'
+
+✅ Chat with Django User data through standard Django queries and without the need for vector embeddings (although you *can* use them)
+
+✅ Easily switch LLMs to upgrade the effectiveness of your agents
+
+✅ Leverage RBAC (role-based access control) within any Django or Python project
+
+✅ Create a Super(visor) Agent that controls other agents
+
+✅ Lock down access to what a User can or cannot do
+
+✅ Add guardrails to ensure an Agent can't do anything it shouldn't (e.g. create, update, read, search, list, share, or delete any data)
+
+✅ and more.
+
+Topics covered:
+
+➕ Integrating Django with LangGraph for building Ai Agents (it's crazy easy)
+
+➕ Django ORM fundamentals
+
+➕ Django Model design basics with database syncing (migrations)
+
+➕ Django Users &amp; Permission Fundamentals
+
+➕ Creating LangChain tools for LangGraph agents
+
+➕ LangGraph Supervisor Agents
+
+➕ Permit.io RBAC for powerful and granular control over user and Ai Agent access
+
+➕ Multi-agent integration
+
+➕ Django + Jupyter integration for rapid prototyping
+
+➕ LangGraph-based lookups to your Django database
+
+</file>
+<file name="django-ai-agent.code-workspace">{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}</file>
+<file name="requirements.txt">Django&gt;=5.0,&lt;6.0
+jupyter
+langchain-openai
+langgraph
+langgraph-supervisor
+python-decouple
+permit</file>
+<file name="notebook/1-hello.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Hello world\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Hello world\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "aiohappyeyeballs==2.6.1\n",
+      "aiohttp==3.12.7\n",
+      "aiosignal==1.3.2\n",
+      "annotated-types==0.7.0\n",
+      "anyio==4.9.0\n",
+      "appnope==0.1.4\n",
+      "argon2-cffi==23.1.0\n",
+      "argon2-cffi-bindings==21.2.0\n",
+      "arrow==1.3.0\n",
+      "asgiref==3.8.1\n",
+      "asttokens==3.0.0\n",
+      "async-lru==2.0.5\n",
+      "attrs==25.3.0\n",
+      "babel==2.17.0\n",
+      "beautifulsoup4==4.13.4\n",
+      "bleach==6.2.0\n",
+      "certifi==2025.4.26\n",
+      "cffi==1.17.1\n",
+      "charset-normalizer==3.4.2\n",
+      "comm==0.2.2\n",
+      "debugpy==1.8.14\n",
+      "decorator==5.2.1\n",
+      "defusedxml==0.7.1\n",
+      "distro==1.9.0\n",
+      "Django==5.2.1\n",
+      "dnspython==2.7.0\n",
+      "email_validator==2.2.0\n",
+      "executing==2.2.0\n",
+      "fastjsonschema==2.21.1\n",
+      "fqdn==1.5.1\n",
+      "frozenlist==1.6.0\n",
+      "h11==0.16.0\n",
+      "httpcore==1.0.9\n",
+      "httpx==0.28.1\n",
+      "idna==3.10\n",
+      "ipykernel==6.29.5\n",
+      "ipython==9.3.0\n",
+      "ipython_pygments_lexers==1.1.1\n",
+      "ipywidgets==8.1.7\n",
+      "isoduration==20.11.0\n",
+      "jedi==0.19.2\n",
+      "Jinja2==3.1.6\n",
+      "jiter==0.10.0\n",
+      "json5==0.12.0\n",
+      "jsonpatch==1.33\n",
+      "jsonpointer==3.0.0\n",
+      "jsonschema==4.24.0\n",
+      "jsonschema-specifications==2025.4.1\n",
+      "jupyter==1.1.1\n",
+      "jupyter-console==6.6.3\n",
+      "jupyter-events==0.12.0\n",
+      "jupyter-lsp==2.2.5\n",
+      "jupyter_client==8.6.3\n",
+      "jupyter_core==5.8.1\n",
+      "jupyter_server==2.16.0\n",
+      "jupyter_server_terminals==0.5.3\n",
+      "jupyterlab==4.4.3\n",
+      "jupyterlab_pygments==0.3.0\n",
+      "jupyterlab_server==2.27.3\n",
+      "jupyterlab_widgets==3.0.15\n",
+      "langchain-core==0.3.63\n",
+      "langchain-openai==0.3.19\n",
+      "langgraph==0.4.7\n",
+      "langgraph-checkpoint==2.0.26\n",
+      "langgraph-prebuilt==0.2.2\n",
+      "langgraph-sdk==0.1.70\n",
+      "langsmith==0.3.43\n",
+      "loguru==0.7.3\n",
+      "MarkupSafe==3.0.2\n",
+      "matplotlib-inline==0.1.7\n",
+      "mistune==3.1.3\n",
+      "multidict==6.4.4\n",
+      "nbclient==0.10.2\n",
+      "nbconvert==7.16.6\n",
+      "nbformat==5.10.4\n",
+      "nest-asyncio==1.6.0\n",
+      "notebook==7.4.3\n",
+      "notebook_shim==0.2.4\n",
+      "openai==1.82.1\n",
+      "orjson==3.10.18\n",
+      "ormsgpack==1.10.0\n",
+      "overrides==7.7.0\n",
+      "packaging==24.2\n",
+      "pandocfilters==1.5.1\n",
+      "parso==0.8.4\n",
+      "permit==2.7.5\n",
+      "pexpect==4.9.0\n",
+      "platformdirs==4.3.8\n",
+      "prometheus_client==0.22.1\n",
+      "prompt_toolkit==3.0.51\n",
+      "propcache==0.3.1\n",
+      "psutil==7.0.0\n",
+      "ptyprocess==0.7.0\n",
+      "pure_eval==0.2.3\n",
+      "pycparser==2.22\n",
+      "pydantic==2.11.5\n",
+      "pydantic_core==2.33.2\n",
+      "Pygments==2.19.1\n",
+      "python-dateutil==2.9.0.post0\n",
+      "python-decouple==3.8\n",
+      "python-json-logger==3.3.0\n",
+      "PyYAML==6.0.2\n",
+      "pyzmq==26.4.0\n",
+      "referencing==0.36.2\n",
+      "regex==2024.11.6\n",
+      "requests==2.32.3\n",
+      "requests-toolbelt==1.0.0\n",
+      "rfc3339-validator==0.1.4\n",
+      "rfc3986-validator==0.1.1\n",
+      "rpds-py==0.25.1\n",
+      "Send2Trash==1.8.3\n",
+      "setuptools==80.9.0\n",
+      "six==1.17.0\n",
+      "sniffio==1.3.1\n",
+      "soupsieve==2.7\n",
+      "sqlparse==0.5.3\n",
+      "stack-data==0.6.3\n",
+      "tenacity==9.1.2\n",
+      "terminado==0.18.1\n",
+      "tiktoken==0.9.0\n",
+      "tinycss2==1.4.0\n",
+      "tornado==6.5.1\n",
+      "tqdm==4.67.1\n",
+      "traitlets==5.14.3\n",
+      "types-python-dateutil==2.9.0.20250516\n",
+      "typing-inspection==0.4.1\n",
+      "typing_extensions==4.14.0\n",
+      "uri-template==1.3.0\n",
+      "urllib3==2.4.0\n",
+      "wcwidth==0.2.13\n",
+      "webcolors==24.11.1\n",
+      "webencodings==0.5.1\n",
+      "websocket-client==1.8.0\n",
+      "widgetsnbextension==4.0.14\n",
+      "xxhash==3.5.0\n",
+      "yarl==1.20.0\n",
+      "zipp==3.22.0\n",
+      "zstandard==0.23.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip freeze"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/10-movie-discovery-ai-agent.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.agents import get_movie_discovery_agent"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langgraph.checkpoint.memory import InMemorySaver \n",
+    "\n",
+    "checkpointer = InMemorySaver()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "agent = get_movie_discovery_agent(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Searching with user 2\n",
+      "Searching with user 2\n"
+     ]
+    }
+   ],
+   "source": [
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": \"2\", \"thread_id\": uuid.uuid4()}}\n",
+    "\n",
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Tell me about the first lord of the rings movie\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "ToolMessage(content='{\"adult\": false, \"backdrop_path\": \"/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg\", \"belongs_to_collection\": {\"id\": 119, \"name\": \"The Lord of the Rings Collection\", \"poster_path\": \"/249qw7r9E31vvOSeMQoOrjxMjfm.jpg\", \"backdrop_path\": \"/bccR2CGTWVVSZAG0yqmy3DIvhTX.jpg\"}, \"budget\": 93000000, \"genres\": [{\"id\": 12, \"name\": \"Adventure\"}, {\"id\": 14, \"name\": \"Fantasy\"}, {\"id\": 28, \"name\": \"Action\"}], \"homepage\": \"http://www.lordoftherings.net/\", \"id\": 120, \"imdb_id\": \"tt0120737\", \"origin_country\": [\"US\"], \"original_language\": \"en\", \"original_title\": \"The Lord of the Rings: The Fellowship of the Ring\", \"overview\": \"Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.\", \"popularity\": 21.8938, \"poster_path\": \"/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg\", \"production_companies\": [{\"id\": 12, \"logo_path\": \"/2ycs64eqV5rqKYHyQK0GVoKGvfX.png\", \"name\": \"New Line Cinema\", \"origin_country\": \"US\"}, {\"id\": 11, \"logo_path\": \"/6FAuASQHybRkZUk08p9PzSs9ezM.png\", \"name\": \"WingNut Films\", \"origin_country\": \"NZ\"}, {\"id\": 5237, \"logo_path\": \"/mlnr7vsBHvLye8oEb5A76C0t8x9.png\", \"name\": \"The Saul Zaentz Company\", \"origin_country\": \"US\"}], \"production_countries\": [{\"iso_3166_1\": \"NZ\", \"name\": \"New Zealand\"}, {\"iso_3166_1\": \"US\", \"name\": \"United States of America\"}], \"release_date\": \"2001-12-18\", \"revenue\": 871368364, \"runtime\": 179, \"spoken_languages\": [{\"english_name\": \"English\", \"iso_639_1\": \"en\", \"name\": \"English\"}], \"status\": \"Released\", \"tagline\": \"One ring to rule them all.\", \"title\": \"The Lord of the Rings: The Fellowship of the Ring\", \"video\": false, \"vote_average\": 8.422, \"vote_count\": 26009}', name='movie_detail', id='22c3650b-d39d-4fb5-9591-f85580e45fbc', tool_call_id='call_qSU4Jd7CijvMH2M3dJizsjly')"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-2]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'**The Lord of the Rings: The Fellowship of the Ring** is the first film in the epic fantasy trilogy directed by Peter Jackson. Here\\'s a detailed overview of the movie:\\n\\n- **Release Date:** December 18, 2001\\n- **Genres:** Adventure, Fantasy, Action\\n- **Runtime:** 179 minutes\\n- **Budget:** $93,000,000\\n- **Revenue:** $871,368,364\\n- **Language:** English\\n- **Country of Origin:** United States, New Zealand\\n- **Production Companies:** New Line Cinema, WingNut Films, The Saul Zaentz Company\\n- **Tagline:** \"One ring to rule them all.\"\\n\\n**Plot Summary:**\\nThe story follows young hobbit Frodo Baggins, who inherits a mysterious ring from his uncle Bilbo. This ring is powerful and dangerous, as it was created by the dark lord Sauron to control Middle-earth. To prevent it from falling into the wrong hands, Frodo must leave his home and embark on a perilous journey. Along the way, a fellowship is formed to protect Frodo and ensure the ring reaches its final destination: Mt. Doom, the only place where it can be destroyed.\\n\\n**Popularity and Reception:**\\nThe film has a high vote average of 8.422 based on 26,009 votes, indicating its widespread acclaim and popularity.\\n\\n**Additional Information:**\\n- **IMDB ID:** [tt0120737](https://www.imdb.com/title/tt0120737/)\\n- **Official Website:** [The Lord of the Rings](http://www.lordoftherings.net/)\\n\\n**Visuals:**\\n- **Poster:** ![Poster](https://image.tmdb.org/t/p/w500/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg)\\n- **Backdrop:** ![Backdrop](https://image.tmdb.org/t/p/w500/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg)\\n\\nThis film is part of the larger \"The Lord of the Rings Collection,\" which continues with two more films, further exploring the epic journey and battles in Middle-earth.'"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/11-multi-agent-supervisor.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.supervisors import get_supervisor"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langgraph.checkpoint.memory import InMemorySaver \n",
+    "\n",
+    "checkpointer = InMemorySaver()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "supervisor = get_supervisor(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": \"2\", \"thread_id\": uuid.uuid4()}}\n",
+    "\n",
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"what are my recent documents?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Here are your 5 most recent documents:\\n\\n1. **Title** (Document ID: 10)\\n2. **Title** (Document ID: 9)\\n3. **Title** (Document ID: 8)\\n4. **Title** (Document ID: 7)\\n5. **Hello world** (Document ID: 6)\\n\\nIf you need more details about any of these documents, just let me know!'"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'I have created a new document titled **\"Mission Impossible: Dead Reckoning Part Two\"** with content related to the movie. The previous documents with duplicate titles have been deleted.\\n\\nIf you need anything else or want to view the new document, just let me know!'"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Change one of the documents with a duplicate title from a movie related to Mission Impossible from May of 2025\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'The document has been successfully updated to **\"Mission Impossible: Final Reckoning\"**. \\n\\nIf you need any further assistance or want to view the document, just let me know!'"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Mission Impossible: Dead Reckoning Part Two as actually named the Final Reckoning not Dead Reckoning Part two\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/12-roles-and-permissions.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from mypermit import permit_client\n",
+    "\n",
+    "permit = permit_client"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "PaginatedResultUserRead(data=[UserRead(key='2', id=UUID('091c69a7-172a-4cfd-ae2e-838dbd512def'), organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a'), project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6'), environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed'), associated_tenants=[], roles=[], created_at=datetime.datetime(2025, 6, 4, 17, 29, 55, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 6, 4, 17, 31, 4, tzinfo=datetime.timezone.utc), email=None, first_name='staff', last_name=None, attributes=None), UserRead(key='3', id=UUID('68ae3c77-0d73-4346-b214-dda04908fcb6'), organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a'), project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6'), environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed'), associated_tenants=[], roles=[], created_at=datetime.datetime(2025, 6, 4, 17, 29, 55, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 6, 4, 17, 31, 5, tzinfo=datetime.timezone.utc), email=None, first_name='ethan_hunt', last_name=None, attributes=None), UserRead(key='1', id=UUID('f44a4c77-8d9b-488d-b02a-44ecf6bc944a'), organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a'), project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6'), environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed'), associated_tenants=[UserInTenant(tenant='default', roles=['viewer'], status=&lt;UserStatus.active: 'active'&gt;, resource_instance_roles=[])], roles=[UserRole(role='viewer', tenant='default')], created_at=datetime.datetime(2025, 6, 4, 17, 29, 54, tzinfo=datetime.timezone.utc), updated_at=datetime.datetime(2025, 6, 4, 17, 31, 4, tzinfo=datetime.timezone.utc), email=None, first_name='cfe', last_name=None, attributes=None)], total_count=3, page_count=3)"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "await permit.api.users.list()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from django.contrib.auth import get_user_model\n",
+    "\n",
+    "User = get_user_model()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key='1' id=UUID('f44a4c77-8d9b-488d-b02a-44ecf6bc944a') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') associated_tenants=[UserInTenant(tenant='default', roles=['viewer'], status=&lt;UserStatus.active: 'active'&gt;, resource_instance_roles=[])] roles=[UserRole(role='viewer', tenant='default')] created_at=datetime.datetime(2025, 6, 4, 17, 29, 54, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 31, 4, tzinfo=datetime.timezone.utc) email=None first_name='cfe' last_name=None attributes=None\n",
+      "key='2' id=UUID('091c69a7-172a-4cfd-ae2e-838dbd512def') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') associated_tenants=[] roles=[] created_at=datetime.datetime(2025, 6, 4, 17, 29, 55, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 31, 4, tzinfo=datetime.timezone.utc) email=None first_name='staff' last_name=None attributes=None\n",
+      "key='3' id=UUID('68ae3c77-0d73-4346-b214-dda04908fcb6') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') associated_tenants=[] roles=[] created_at=datetime.datetime(2025, 6, 4, 17, 29, 55, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 31, 5, tzinfo=datetime.timezone.utc) email=None first_name='ethan_hunt' last_name=None attributes=None\n"
+     ]
+    }
+   ],
+   "source": [
+    "for u in User.objects.all():\n",
+    "    user_data = {\n",
+    "        \"key\": f\"{u.id}\",\n",
+    "        \"first_name\": f\"{u.username}\"\n",
+    "    }\n",
+    "    response = await permit.api.users.sync(user_data)\n",
+    "    print(response)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "await permit.check(\"1\", \"read\", \"document\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "resources = [\n",
+    "    {\n",
+    "        \"name\": \"Document\",\n",
+    "        \"key\": \"document\",\n",
+    "        \"actions\": {\n",
+    "            \"read\": {},\n",
+    "            \"create\": {},\n",
+    "            \"update\": {},\n",
+    "            \"delete\": {},\n",
+    "        }\n",
+    "    },\n",
+    "    {\n",
+    "        \"name\": \"Movie Discovery Resource\",\n",
+    "        \"key\": \"movie_disovery\",\n",
+    "        \"actions\": {\n",
+    "            \"search\": {},\n",
+    "            \"detail\": {},\n",
+    "        }\n",
+    "    }\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from permit import PermitApiError\n",
+    "\n",
+    "async def get_or_create_resource(resource_data:dict):\n",
+    "    resource_key = resource_data.get('key')\n",
+    "    try:\n",
+    "        _resource = await permit.api.resources.get(resource_key)\n",
+    "    except PermitApiError as e:\n",
+    "        if e.status_code == 404:\n",
+    "            _resource = await permit.api.resources.create(resource_data)\n",
+    "        else:\n",
+    "            raise e\n",
+    "    return _resource"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key='document' id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 17, 40, 6, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 40, 6, tzinfo=datetime.timezone.utc) name='Document' urn='prn:hungrypy:default:document' description=None actions={'delete': ActionBlockRead(name='delete', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('83b57a4d-1661-4923-9122-80828b84b98f'), key='delete'), 'update': ActionBlockRead(name='update', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('6db441b0-bda1-46f5-adc7-ca5121d157d9'), key='update'), 'create': ActionBlockRead(name='create', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('71112134-a426-4ed0-b2f9-764f5fc9439d'), key='create'), 'read': ActionBlockRead(name='read', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('373787ef-f0f4-472c-aad0-06c72fe2feba'), key='read')} type_attributes=None attributes={} roles={} relations={} v1compat_path=None v1compat_type=None v1compat_name=None action_groups={}\n",
+      "key='movie_disovery' id=UUID('6a68fb87-13be-4c2d-a016-3dc407a18ac3') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 17, 40, 8, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 40, 8, tzinfo=datetime.timezone.utc) name='Movie Discovery Resource' urn='prn:hungrypy:default:movie_disovery' description=None actions={'detail': ActionBlockRead(name='detail', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('68399c91-1bcd-4ba3-9a1b-200dc611939a'), key='detail'), 'search': ActionBlockRead(name='search', description=None, attributes=None, v1compat_path=None, v1compat_name=None, id=UUID('dab994c9-76a9-462b-bb25-92eabfbecb25'), key='search')} type_attributes=None attributes={} roles={} relations={} v1compat_path=None v1compat_type=None v1compat_name=None action_groups={}\n"
+     ]
+    }
+   ],
+   "source": [
+    "for resource_data in resources:\n",
+    "    response = await get_or_create_resource(resource_data)\n",
+    "    print(response)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# readonly_permissions = [\n",
+    "#     \"document:read\",\n",
+    "#     \"movie_disovery:search\",\n",
+    "#     \"movie_disovery:detail\"\n",
+    "# ]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roles = [\n",
+    "    {\n",
+    "        \"name\": \"Manager\",\n",
+    "        \"key\": \"manager\",\n",
+    "        \"permissions\": [\n",
+    "            \"document:read\",\n",
+    "            \"document:create\",\n",
+    "            \"document:update\",\n",
+    "            \"document:delete\",\n",
+    "            \"movie_disovery:search\",\n",
+    "            \"movie_disovery:detail\"\n",
+    "        ]\n",
+    "    }, \n",
+    "    {\n",
+    "        \"name\": \"Viewer\",\n",
+    "        \"key\": \"viewer\",\n",
+    "        \"permissions\": [\n",
+    "            \"document:read\",\n",
+    "            \"movie_disovery:search\",\n",
+    "            \"movie_disovery:detail\"\n",
+    "        ]\n",
+    "    }\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from permit import PermitApiError\n",
+    "\n",
+    "async def get_or_create_role(role_data:dict):\n",
+    "    _key = role_data.get('key')\n",
+    "    try:\n",
+    "        _resource = await permit.api.roles.get(_key)\n",
+    "    except PermitApiError as e:\n",
+    "        if e.status_code == 404:\n",
+    "            _resource = await permit.api.roles.create(role_data)\n",
+    "        else:\n",
+    "            raise e\n",
+    "    return _resource"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# await permit.api.roles.delete(\"viewer\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "name='Manager' description=None permissions=['movie_disovery:detail', 'document:create', 'movie_disovery:search', 'document:update', 'document:read'] attributes={} extends=[] granted_to=None v1compat_settings=None v1compat_attributes=None key='manager' id=UUID('99f5638e-c457-408b-bb54-c4167b228d17') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 17, 47, 18, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 47, 18, tzinfo=datetime.timezone.utc)\n",
+      "name='Viewer' description=None permissions=['document:read', 'movie_disovery:detail', 'movie_disovery:search'] attributes={} extends=[] granted_to=None v1compat_settings=None v1compat_attributes=None key='viewer' id=UUID('e6f8048b-3724-4b78-93ce-91069b723ac6') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 17, 54, 33, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 17, 54, 33, tzinfo=datetime.timezone.utc)\n"
+     ]
+    }
+   ],
+   "source": [
+    "for role_data in roles:\n",
+    "    response = await get_or_create_role(role_data)\n",
+    "    print(response)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "user = User.objects.all().first()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 46,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "user.id"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "RoleAssignmentRead(id=UUID('1065f938-eb46-4798-a51f-988d57e106b3'), user='1', role='admin', tenant='default', resource_instance=None, resource_instance_id=None, user_id=UUID('f44a4c77-8d9b-488d-b02a-44ecf6bc944a'), role_id=UUID('70304e6f-7319-4a7e-ba9c-c7ddbdf2ddec'), tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47'), organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a'), project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6'), environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed'), created_at=datetime.datetime(2025, 6, 4, 18, 19, 35, tzinfo=datetime.timezone.utc))"
+      ]
+     },
+     "execution_count": 50,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = await permit.api.users.assign_role({\n",
+    "    \"user\": f\"{user.id}\",\n",
+    "    \"role\": \"admin\",\n",
+    "    \"tenant\": \"default\"\n",
+    "})\n",
+    "response"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 51,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "await permit.check(f\"{user.id}\", \"delete\", \"document\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langgraph.checkpoint.memory import InMemorySaver \n",
+    "from ai.supervisors import get_supervisor\n",
+    "import uuid \n",
+    "\n",
+    "checkpointer = InMemorySaver()\n",
+    "supervisor = get_supervisor(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 53,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "doc_id = 24\n",
+    "user_id = user.id\n",
+    "user_id"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "config = {\"configurable\": {\"user_id\": user_id, \"thread_id\": uuid.uuid4()}}\n",
+    "\n",
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"what are my recent documents?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "\"I've provided the list of your recent documents. If you need further assistance with them, feel free to ask!\""
+      ]
+     },
+     "execution_count": 55,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'A random document with ID 16 has been successfully deleted. If you need any more help, feel free to ask!'"
+      ]
+     },
+     "execution_count": 57,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": f\"Delete any random document by id\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/2-django-users-perms.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet [&lt;User: cfe&gt;, &lt;User: staff&gt;, &lt;User: ethan_hunt&gt;]&gt;"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from django.contrib.auth import get_user_model\n",
+    "\n",
+    "User = get_user_model()\n",
+    "\n",
+    "# list -&gt; get \n",
+    "User.objects.all()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# help(User)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# user_obj = User.objects.create(\n",
+    "#    username=\"ethan_hunt\"\n",
+    "# )\n",
+    "\n",
+    "user_obj = User.objects.get(\n",
+    "    username=\"ethan_hunt\"\n",
+    ")\n",
+    "user_obj.is_staff = True # can login to Djanngo admin or not\n",
+    "\n",
+    "# django form -&gt; html form -&gt; api request\n",
+    "user_obj.set_password(\"abc123007\")\n",
+    "\n",
+    "user_obj.save()\n",
+    "user_obj.is_staff"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'pbkdf2_sha256$1000000$faD2MlqNfJrypDWC9Eftyr$0o1hLi/q6NGRpqTy9GTbstbS2tcfOQYfwm36lRCX8AM='"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# user_obj.password"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;User: staff&gt;"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# detail -&gt; get\n",
+    "user_obj = User.objects.last()\n",
+    "user_obj"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# create or update\n",
+    "# user_obj.save() # pre_save -&gt; post_save"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# delete\n",
+    "# user_obj.delete()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;Document: Hello world&gt;"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from documents.models import Document\n",
+    "\n",
+    "doc_obj = Document(\n",
+    "    owner=user_obj,\n",
+    "    title=\"Hello world\"\n",
+    ")\n",
+    "doc_obj"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "doc_obj.save()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;Document: Hello world&gt;"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "doc_obj"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;Document: Title&gt;"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Document.objects.create(owner=user_obj)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "user_obj.id"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;Document: Title&gt;"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Document.objects.create(owner_id=2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/3-django-built-in-permissions.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet [&lt;User: cfe&gt;, &lt;User: staff&gt;, &lt;User: ethan_hunt&gt;]&gt;"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from django.contrib.auth import get_user_model\n",
+    "\n",
+    "User = get_user_model()\n",
+    "\n",
+    "# list -&gt; get \n",
+    "User.objects.all()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;User: cfe&gt;"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# superuser = admin user\n",
+    "# python manage.py createsuperuser\n",
+    "# User.objects.create_superuser()\n",
+    "\n",
+    "super_u = User.objects.filter(is_superuser=True).first()\n",
+    "super_u"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet []&gt;"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "super_u.user_permissions.all()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;User: ethan_hunt&gt;"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "staff_u = User.objects.filter(is_superuser=False, is_staff=True).first()\n",
+    "staff_u"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet []&gt;"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "staff_u.user_permissions.all()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "view_logentry\n",
+      "view_group\n",
+      "view_permission\n",
+      "view_user\n",
+      "view_contenttype\n",
+      "view_document\n",
+      "view_session\n"
+     ]
+    }
+   ],
+   "source": [
+    "from django.contrib.auth.models import Permission\n",
+    "\n",
+    "perms_qs = Permission.objects.filter(codename__icontains=\"VIEW\")\n",
+    "for obj in perms_qs:\n",
+    "    print(obj.codename)\n",
+    "    staff_u.user_permissions.remove(obj)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet [&lt;Permission: Documents | document | Can add document&gt;, &lt;Permission: Documents | document | Can change document&gt;, &lt;Permission: Documents | document | Can delete document&gt;, &lt;Permission: Documents | document | Can view document&gt;]&gt;"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "docs_qs = Permission.objects.filter(codename__endswith=\"document\")\n",
+    "docs_qs\n",
+    "# staff_u.user_permissions.set(perms_qs)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;QuerySet [&lt;Permission: Administration | log entry | Can view log entry&gt;, &lt;Permission: Authentication and Authorization | group | Can view group&gt;, &lt;Permission: Authentication and Authorization | permission | Can view permission&gt;, &lt;Permission: Authentication and Authorization | user | Can view user&gt;, &lt;Permission: Content Types | content type | Can view content type&gt;, &lt;Permission: Documents | document | Can add document&gt;, &lt;Permission: Documents | document | Can change document&gt;, &lt;Permission: Documents | document | Can delete document&gt;, &lt;Permission: Documents | document | Can view document&gt;, &lt;Permission: Sessions | session | Can view session&gt;]&gt;"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "new_perms = docs_qs | perms_qs\n",
+    "new_perms"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "new_perms = new_perms.exclude(codename__icontains='delete')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "staff_u.user_permissions.set(new_perms)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/4-langgraph-django-tools-basics.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.tools import list_documents, get_document"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "config = {\n",
+    "    \"user_id\": 2\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "AttributeError",
+     "evalue": "'function' object has no attribute 'invoke'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[31m---------------------------------------------------------------------------\u001b[39m",
+      "\u001b[31mAttributeError\u001b[39m                            Traceback (most recent call last)",
+      "\u001b[36mCell\u001b[39m\u001b[36m \u001b[39m\u001b[32mIn[4]\u001b[39m\u001b[32m, line 1\u001b[39m\n\u001b[32m----&gt; \u001b[39m\u001b[32m1\u001b[39m \u001b[43mlist_documents\u001b[49m\u001b[43m.\u001b[49m\u001b[43minvoke\u001b[49m(\u001b[38;5;28;01mNone\u001b[39;00m, config)\n",
+      "\u001b[31mAttributeError\u001b[39m: 'function' object has no attribute 'invoke'"
+     ]
+    }
+   ],
+   "source": [
+    "list_documents.invoke(None, config)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'id': 7, 'title': 'Title'}"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "get_document.invoke({\"document_id\": 7}, config)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/5-verify-llm-django.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.llms import get_openai_model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = get_openai_model()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "AIMessage(content='I am an AI language model created by OpenAI, designed to assist with a wide range of questions and tasks by providing information, generating text, and engaging in conversation. How can I help you today?', additional_kwargs={'refusal': None}, response_metadata={'token_usage': {'completion_tokens': 41, 'prompt_tokens': 11, 'total_tokens': 52, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_62a23a81ef', 'id': 'chatcmpl-BePlsqHA0SvBf9qdXNd4qRW9FrncD', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None}, id='run--b86b05f2-37f9-4967-a2be-16f7f7a8ef35-0', usage_metadata={'input_tokens': 11, 'output_tokens': 41, 'total_tokens': 52, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}})"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.invoke(\"Who are you?\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/6-hello-world-ai-agent.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.agents import get_document_agent"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "agent = get_document_agent()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": \"2\", \"thread_id\": uuid.uuid4()}}\n",
+    "\n",
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"what are my recent documents?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 what are my recent documents? content='what are my recent documents?' additional_kwargs={} response_metadata={} id='d7ec2686-59ac-42dd-b833-7a073d02f03a'\n",
+      "\n",
+      "\n",
+      "\n",
+      "2 [{\"id\": 10, \"title\": \"Title\"}, {\"id\": 9, \"title\": \"Title\"}, {\"id\": 8, \"title\": \"Title\"}, {\"id\": 7, \"title\": \"Title\"}, {\"id\": 6, \"title\": \"Hello world\"}] content='[{\"id\": 10, \"title\": \"Title\"}, {\"id\": 9, \"title\": \"Title\"}, {\"id\": 8, \"title\": \"Title\"}, {\"id\": 7, \"title\": \"Title\"}, {\"id\": 6, \"title\": \"Hello world\"}]' name='list_documents' id='ee373fca-630c-4659-b522-41c85022065d' tool_call_id='call_u0husBYqj4nTRS7YMxJeSmC5'\n",
+      "\n",
+      "\n",
+      "\n",
+      "3 Here are your most recent documents:\n",
+      "\n",
+      "1. **Title** (ID: 10)\n",
+      "2. **Title** (ID: 9)\n",
+      "3. **Title** (ID: 8)\n",
+      "4. **Title** (ID: 7)\n",
+      "5. **Hello world** (ID: 6) content='Here are your most recent documents:\\n\\n1. **Title** (ID: 10)\\n2. **Title** (ID: 9)\\n3. **Title** (ID: 8)\\n4. **Title** (ID: 7)\\n5. **Hello world** (ID: 6)' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 64, 'prompt_tokens': 170, 'total_tokens': 234, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_34a54ae93c', 'id': 'chatcmpl-BeQ0fc9WEHW8DJHCQyhw6FqpNpYZ5', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} id='run--58276873-584c-462c-834d-eb46caa8c76e-0' usage_metadata={'input_tokens': 170, 'output_tokens': 64, 'total_tokens': 234, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "\n",
+      "\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i, msg in enumerate(response['messages']):\n",
+    "    if msg.content:\n",
+    "        print(i, msg.content, msg)\n",
+    "        print(\"\\n\\n\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Here are your most recent documents:\\n\\n1. **Title** (ID: 10)\\n2. **Title** (ID: 9)\\n3. **Title** (ID: 8)\\n4. **Title** (ID: 7)\\n5. **Hello world** (ID: 6)'"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/7-memory-ai-agent.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.agents import get_document_agent"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langgraph.checkpoint.memory import InMemorySaver \n",
+    "\n",
+    "checkpointer = InMemorySaver()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "agent = get_document_agent(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": \"2\", \"thread_id\": uuid.uuid4()}}\n",
+    "\n",
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"what are my recent documents?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Here are your 5 most recent documents:\\n\\n1. Document ID: 10, Title: \"Title\"\\n2. Document ID: 9, Title: \"Title\"\\n3. Document ID: 8, Title: \"Title\"\\n4. Document ID: 7, Title: \"Title\"\\n5. Document ID: 6, Title: \"Hello world\"\\n\\nIf you need more details about any of these documents, just let me know!'"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Yes, it appears that there are duplicate titles among your recent documents. Documents with IDs 10, 9, 8, and 7 all have the title \"Title\". Only the document with ID 6 has a unique title, \"Hello world\".'"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Are there duplicates\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/8-agent-crud.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from langgraph.checkpoint.memory import InMemorySaver \n",
+    "from ai.agents import get_document_agent"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": \"3\", \"thread_id\": uuid.uuid4()}}\n",
+    "checkpointer = InMemorySaver()\n",
+    "agent = get_document_agent(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'The document title has been successfully updated to \"LoR Summary.\" If you need any more changes or assistance, feel free to ask!'"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Update the Lord of the Rings trilogy document title to just LoR Summary.\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'The \"Lord of the Rings\" trilogy, directed by Peter Jackson and based on the novels by J.R.R. Tolkien, is a monumental fantasy epic that consists of three films: \"The Fellowship of the Ring\" (2001), \"The Two Towers\" (2002), and \"The Return of the King\" (2003). The trilogy is set in the fictional world of Middle-earth and follows the quest to destroy the One Ring, a powerful artifact created by the dark lord Sauron to conquer all of Middle-earth.\\n\\n### The Fellowship of the Ring\\nThe journey begins in the Shire, where a young hobbit named Frodo Baggins inherits the One Ring from his uncle, Bilbo Baggins. Gandalf the Grey, a wise wizard, discovers the Ring\\'s true nature and advises Frodo to leave the Shire. Frodo is joined by his friends Samwise Gamgee, Merry, and Pippin. They form a fellowship with Aragorn, Legolas, Gimli, Boromir, and Gandalf to take the Ring to Mount Doom in Mordor, the only place where it can be destroyed. The fellowship faces numerous challenges, including the treacherous Mines of Moria and the betrayal of Boromir.\\n\\n### The Two Towers\\nThe fellowship is broken, with Frodo and Sam continuing their journey to Mordor, guided by the creature Gollum, who once possessed the Ring. Aragorn, Legolas, and Gimli pursue the orcs who have captured Merry and Pippin. The film features the epic Battle of Helm\\'s Deep, where the forces of Rohan, led by King Théoden, defend against Saruman\\'s army. Meanwhile, Frodo struggles with the Ring\\'s growing influence, and Gollum\\'s intentions remain uncertain.\\n\\n### The Return of the King\\nThe final installment sees the forces of good preparing for the ultimate battle against Sauron\\'s armies. Aragorn embraces his destiny as the heir to the throne of Gondor. The Battle of Pelennor Fields is a pivotal moment, showcasing the bravery of men, elves, and dwarves. Frodo and Sam, with Gollum\\'s guidance, reach Mount Doom. In a climactic moment, Frodo succumbs to the Ring\\'s power, but Gollum\\'s intervention leads to the Ring\\'s destruction. Sauron is defeated, and peace returns to Middle-earth. Aragorn is crowned king, and the hobbits return to the Shire, forever changed by their journey.\\n\\nThe trilogy is celebrated for its groundbreaking visual effects, epic storytelling, and deep exploration of themes such as friendship, sacrifice, and the struggle between good and evil. It received critical acclaim and numerous awards, including multiple Academy Awards for \"The Return of the King.\"'"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Give me a summary of the movie Lord of the Rings trilogy.\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'The \"Mission Impossible 2 - Movie Summary\" document has already been removed. If there\\'s anything else you need, feel free to ask!'"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Remove the mission impossible 2 summary.\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'The summary of the \"Lord of the Rings\" trilogy has been successfully saved to your documents with the title \"Lord of the Rings Trilogy - Movie Summary.\" If you need anything else, feel free to ask!'"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\n",
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Great. Now save it to my documents.\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "\n",
+    "response['messages'][-1].content\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Here are your recent documents:\\n\\n1. **Lord of the Rings Trilogy - Movie Summary**\\n2. **Mission Impossible 2 - Movie Summary**\\n3. **Mission Impossible 1 - Movie Summary**\\n\\nIf you need more information or want to manage your documents further, just let me know!'"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\n",
+    "response = agent.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"What are my recent documents?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")\n",
+    "\n",
+    "response['messages'][-1].content"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/9-tmdb-api-client.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from tmdb import client as tmdb_client"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "response = tmdb_client.search_movie(\"Mission Impossible\")\n",
+    "results = response.get(\"results\")\n",
+    "movie_id = results[0].get('id')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'adult': False,\n",
+       " 'backdrop_path': '/3VkPqpjKikQg2M2n6xgTfR9xr7E.jpg',\n",
+       " 'belongs_to_collection': {'id': 87359,\n",
+       "  'name': 'Mission: Impossible Collection',\n",
+       "  'poster_path': '/geEjCGfdmRAA1skBPwojcdvnZ8A.jpg',\n",
+       "  'backdrop_path': '/mroWh717g0Ah2c0rrPGW6f3EWMM.jpg'},\n",
+       " 'budget': 400000000,\n",
+       " 'genres': [{'id': 28, 'name': 'Action'},\n",
+       "  {'id': 12, 'name': 'Adventure'},\n",
+       "  {'id': 53, 'name': 'Thriller'}],\n",
+       " 'homepage': 'https://www.missionimpossible.com',\n",
+       " 'id': 575265,\n",
+       " 'imdb_id': 'tt9603208',\n",
+       " 'origin_country': ['US'],\n",
+       " 'original_language': 'en',\n",
+       " 'original_title': 'Mission: Impossible - The Final Reckoning',\n",
+       " 'overview': \"Ethan Hunt and team continue their search for the terrifying AI known as the Entity — which has infiltrated intelligence networks all over the globe — with the world's governments and a mysterious ghost from Hunt's past on their trail. Joined by new allies and armed with the means to shut the Entity down for good, Hunt is in a race against time to prevent the world as we know it from changing forever.\",\n",
+       " 'popularity': 272.2818,\n",
+       " 'poster_path': '/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg',\n",
+       " 'production_companies': [{'id': 4,\n",
+       "   'logo_path': '/gz66EfNoYPqHTYI4q9UEN4CbHRc.png',\n",
+       "   'name': 'Paramount Pictures',\n",
+       "   'origin_country': 'US'},\n",
+       "  {'id': 82819,\n",
+       "   'logo_path': '/gXfFl9pRPaoaq14jybEn1pHeldr.png',\n",
+       "   'name': 'Skydance Media',\n",
+       "   'origin_country': 'US'},\n",
+       "  {'id': 21777,\n",
+       "   'logo_path': None,\n",
+       "   'name': 'TC Productions',\n",
+       "   'origin_country': 'US'}],\n",
+       " 'production_countries': [{'iso_3166_1': 'US',\n",
+       "   'name': 'United States of America'}],\n",
+       " 'release_date': '2025-05-17',\n",
+       " 'revenue': 353736128,\n",
+       " 'runtime': 170,\n",
+       " 'spoken_languages': [{'english_name': 'French',\n",
+       "   'iso_639_1': 'fr',\n",
+       "   'name': 'Français'},\n",
+       "  {'english_name': 'English', 'iso_639_1': 'en', 'name': 'English'},\n",
+       "  {'english_name': 'Inuktitut', 'iso_639_1': 'iu', 'name': ''}],\n",
+       " 'status': 'Released',\n",
+       " 'tagline': 'Our lives are the sum of our choices.',\n",
+       " 'title': 'Mission: Impossible - The Final Reckoning',\n",
+       " 'video': False,\n",
+       " 'vote_average': 7.1,\n",
+       " 'vote_count': 571}"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "detail_response = tmdb_client.movie_detail(movie_id)\n",
+    "detail_response"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/BONUS-instance-based-rebac.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from mypermit import permit_client\n",
+    "\n",
+    "permit = permit_client"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from django.contrib.auth import get_user_model\n",
+    "from documents.models import Document\n",
+    "\n",
+    "\n",
+    "User = get_user_model()\n",
+    "\n",
+    "admin_users = User.objects.filter(is_superuser=True)\n",
+    "documents = Document.objects.all()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from permit import PermitApiError\n",
+    "\n",
+    "async def get_or_create_resource_instance(django_instance, resource_key=\"document\"):\n",
+    "    _key = f\"{resource_key}:{django_instance.id}\"\n",
+    "    try:\n",
+    "        _resource = await permit.api.resource_instances.get(_key)\n",
+    "    except PermitApiError as e:\n",
+    "        if e.status_code == 404:\n",
+    "            payload = {\n",
+    "                \"key\": f\"{django_instance.id}\",\n",
+    "                \"resource\": resource_key,\n",
+    "                \"tenant\": \"default\",\n",
+    "                \n",
+    "            }\n",
+    "            _resource = await permit.api.resource_instances.create(payload)\n",
+    "        else:\n",
+    "            raise e\n",
+    "    return _resource"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "async def assign_user_ownership(django_user, django_instance, resource_key=\"document\"):\n",
+    "    _key = f\"{resource_key}:{django_instance.id}\"\n",
+    "    return await permit.api.users.assign_role({\n",
+    "        \"user\": f\"{django_user.id}\",\n",
+    "        \"role\": \"admin\",\n",
+    "        \"resource_instance\": _key,\n",
+    "        \"tenant\": \"default\",\n",
+    "    })"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key='6' tenant='default' resource='document' id=UUID('7f4a32ee-5bce-4784-884e-ccc0fb1dd9e4') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='11' tenant='default' resource='document' id=UUID('386858b2-6f87-44eb-9903-a488fc5ec534') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='14' tenant='default' resource='document' id=UUID('f6e60a1d-8104-4d15-973f-28826514f603') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, 1, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, 1, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='26' tenant='default' resource='document' id=UUID('7990fa04-f8c3-4dd0-9823-da0f85b9f9bb') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, 2, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, 2, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n"
+     ]
+    }
+   ],
+   "source": [
+    "for obj in documents:\n",
+    "    response = await get_or_create_resource_instance(obj, resource_key=\"document\")\n",
+    "    role = await assign_user_ownership(obj.owner, obj, resource_key=\"document\")\n",
+    "    print(response)\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key='6' tenant='default' resource='document' id=UUID('7f4a32ee-5bce-4784-884e-ccc0fb1dd9e4') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='11' tenant='default' resource='document' id=UUID('386858b2-6f87-44eb-9903-a488fc5ec534') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='14' tenant='default' resource='document' id=UUID('f6e60a1d-8104-4d15-973f-28826514f603') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, 1, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, 1, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n",
+      "key='26' tenant='default' resource='document' id=UUID('7990fa04-f8c3-4dd0-9823-da0f85b9f9bb') organization_id=UUID('c5928800-1737-4973-a296-ec1c24fa0a1a') project_id=UUID('f2327095-7e49-425e-8726-87b2a85e7ee6') environment_id=UUID('a3856ddc-91af-43ac-8b22-08200a8855ed') created_at=datetime.datetime(2025, 6, 4, 18, 28, 2, tzinfo=datetime.timezone.utc) updated_at=datetime.datetime(2025, 6, 4, 18, 28, 2, tzinfo=datetime.timezone.utc) resource_id=UUID('3f71f9fd-14f4-4702-88f2-6745a0b68003') tenant_id=UUID('f99e0569-2824-4fe5-a820-43e804eb5d47') attributes=None relationships=None\n"
+     ]
+    }
+   ],
+   "source": [
+    "for admin_u in admin_users:\n",
+    "    for obj in documents:\n",
+    "        response = await get_or_create_resource_instance(obj, resource_key=\"document\")\n",
+    "        role = await assign_user_ownership(admin_u, obj, resource_key=\"document\")\n",
+    "        print(response)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "False"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "random_user = User.objects.all().order_by(\"?\")[0]\n",
+    "random_doc = Document.objects.all().order_by(\"?\")[0]\n",
+    "\n",
+    "await permit.check(f\"{random_user.id}\", \"update\", f\"document:{random_doc.id}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+</file>
+<file name="notebook/DEMO.ipynb">{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import setup  # notebooks/setup.py\n",
+    "setup.init()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ai.supervisors import get_supervisor\n",
+    "from django.contrib.auth import get_user_model\n",
+    "from langgraph.checkpoint.memory import InMemorySaver "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "&lt;User: staff&gt;"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "User = get_user_model()\n",
+    "user_a = User.objects.get(id=2)\n",
+    "user_a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "checkpointer = InMemorySaver()\n",
+    "supervisor = get_supervisor(model=\"gpt-4o\", checkpointer=checkpointer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uuid \n",
+    "config = {\"configurable\": {\"user_id\": f\"{user_a.id}\", \"thread_id\": uuid.uuid4()}}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Searching with user 2\n"
+     ]
+    }
+   ],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"What is the most recent Lord of the Rings movie?\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "The most recent \"Lord of the Rings\" movie is **\"The Lord of the Rings: The War of the Rohirrim,\"** which is set to be released on **December 5, 2024**. If you need more information or details about the previous movies, feel free to ask!"
+      ],
+      "text/plain": [
+       "&lt;IPython.core.display.Markdown object&gt;"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from IPython.display import display, Markdown\n",
+    "display(Markdown(response['messages'][-1].content))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"Save that movie as a new document\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "It seems there was an issue with saving the movie as a new document. If you have any other requests or need assistance, please let me know!"
+      ],
+      "text/plain": [
+       "&lt;IPython.core.display.Markdown object&gt;"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from IPython.display import display, Markdown\n",
+    "display(Markdown(response['messages'][-1].content))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"I've updated permissions. Try to save it again.\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "The movie **\"The Lord of the Rings: The War of the Rohirrim\"** has been successfully saved as a new document. If you need anything else, feel free to ask!"
+      ],
+      "text/plain": [
+       "&lt;IPython.core.display.Markdown object&gt;"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from IPython.display import display, Markdown\n",
+    "display(Markdown(response['messages'][-1].content))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "response = supervisor.invoke(\n",
+    "    {\"messages\": \n",
+    "        [\n",
+    "            {\"role\": \"user\", \"content\": \"It is not called Mission: Impossible - Dead Reckoning not Mission: Impossible - Dead Reckoning Part One they changed it. Update the correct document to reflect that\"}\n",
+    "        ]\n",
+    "    },\n",
+    "    config\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "The document has been successfully updated to reflect the correct title: **\"Mission: Impossible - Dead Reckoning.\"** If you need any further assistance or have more updates, feel free to let me know!"
+      ],
+      "text/plain": [
+       "&lt;IPython.core.display.Markdown object&gt;"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from IPython.display import display, Markdown\n",
+    "display(Markdown(response['messages'][-1].content))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# response = supervisor.invoke(\n",
+    "#     {\"messages\": \n",
+    "#         [\n",
+    "#             {\"role\": \"user\", \"content\": \"Hey you made too many delete the extra documents\"}\n",
+    "#         ]\n",
+    "#     },\n",
+    "#     config\n",
+    "# )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from IPython.display import display, Markdown\n",
+    "display(Markdown(response['messages'][-1].content))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "content='What is the most recent Mission Impossible movie?' additional_kwargs={} response_metadata={} id='41604c00-f754-4099-9e73-0c88a6c928d6'\n",
+      "content='' additional_kwargs={'tool_calls': [{'id': 'call_tOdGB9oQwQ7AKBRkECV1U4L0', 'function': {'arguments': '{}', 'name': 'transfer_to_movie-discovery-assistant'}, 'type': 'function'}], 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 15, 'prompt_tokens': 95, 'total_tokens': 110, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-BenwJPw2B0tEqWg8GOJRQD7byswNN', 'service_tier': 'default', 'finish_reason': 'tool_calls', 'logprobs': None} name='supervisor' id='run--34978ace-8eee-48ce-b2eb-c7e574f07f11-0' tool_calls=[{'name': 'transfer_to_movie-discovery-assistant', 'args': {}, 'id': 'call_tOdGB9oQwQ7AKBRkECV1U4L0', 'type': 'tool_call'}] usage_metadata={'input_tokens': 95, 'output_tokens': 15, 'total_tokens': 110, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Successfully transferred to movie-discovery-assistant' name='transfer_to_movie-discovery-assistant' id='463b395a-9c6e-4fbf-b3e2-3bfb59ca54a4' tool_call_id='call_tOdGB9oQwQ7AKBRkECV1U4L0'\n",
+      "content='The most recent \"Mission: Impossible\" movie is **\"Mission: Impossible - Dead Reckoning Part One,\"** which was released on **July 8, 2023**. \\n\\n### Overview:\\nEthan Hunt and his IMF team embark on their most dangerous mission yet: to track down a terrifying new weapon that threatens all of humanity before it falls into the wrong hands. With control of the future and the world\\'s fate at stake, a deadly race around the globe begins.\\n\\n### Details:\\n- **Release Date:** July 8, 2023\\n- **Rating:** 7.5/10\\n- **Genres:** Action, Adventure, Thriller\\n- **Poster:**\\n![Mission: Impossible - Dead Reckoning Part One](https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg)\\n\\nIf you need more information or details about the next movie in the series, let me know!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 199, 'prompt_tokens': 1352, 'total_tokens': 1551, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_34a54ae93c', 'id': 'chatcmpl-BenwLWpSUVmf1wy7W3Oo3kVAunkoe', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='movie-discovery-assistant' id='run--48f80de3-3725-43e9-8c84-e0a9f81ff714-0' usage_metadata={'input_tokens': 1352, 'output_tokens': 199, 'total_tokens': 1551, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Transferring back to supervisor' additional_kwargs={} response_metadata={'__is_handoff_back': True} name='movie-discovery-assistant' id='a2c969a9-da4a-4fb6-89a5-d77e9600adf3' tool_calls=[{'name': 'transfer_back_to_supervisor', 'args': {}, 'id': '5b4f8059-4ff2-476c-b4a2-bd585f8151f5', 'type': 'tool_call'}]\n",
+      "content='Successfully transferred back to supervisor' name='transfer_back_to_supervisor' id='ab4a7b67-5173-4979-8590-d6f23fabbbf4' tool_call_id='5b4f8059-4ff2-476c-b4a2-bd585f8151f5'\n",
+      "content='The most recent \"Mission: Impossible\" movie is **\"Mission: Impossible - Dead Reckoning Part One,\"** which was released on **July 8, 2023**. If you need more information or details about the next movie in the series, feel free to ask!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 58, 'prompt_tokens': 393, 'total_tokens': 451, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-BenwRPVELCIS1wdVTC8hwvo2e4pUy', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='supervisor' id='run--33d4f3d3-4e56-4148-9f69-ef131d050071-0' usage_metadata={'input_tokens': 393, 'output_tokens': 58, 'total_tokens': 451, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Save that movie as a new document' additional_kwargs={} response_metadata={} id='520000bc-3a1f-408b-b7a3-1181a988423d'\n",
+      "content='' additional_kwargs={'tool_calls': [{'id': 'call_IzfObn6w6KLzxQKFcbyMYeWm', 'function': {'arguments': '{}', 'name': 'transfer_to_document-assistant'}, 'type': 'function'}], 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 13, 'prompt_tokens': 468, 'total_tokens': 481, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-BenyPqGUs9V3JrzYj7NYZhFK9KYrF', 'service_tier': 'default', 'finish_reason': 'tool_calls', 'logprobs': None} name='supervisor' id='run--a835317a-336d-443a-9b04-c4951e1e42a5-0' tool_calls=[{'name': 'transfer_to_document-assistant', 'args': {}, 'id': 'call_IzfObn6w6KLzxQKFcbyMYeWm', 'type': 'tool_call'}] usage_metadata={'input_tokens': 468, 'output_tokens': 13, 'total_tokens': 481, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Successfully transferred to document-assistant' name='transfer_to_document-assistant' id='cc1cce98-54c3-4662-a75e-317343dca8b2' tool_call_id='call_IzfObn6w6KLzxQKFcbyMYeWm'\n",
+      "content='The movie **\"Mission: Impossible - Dead Reckoning Part One\"** has been saved as a new document. If you need anything else, feel free to ask!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 35, 'prompt_tokens': 1072, 'total_tokens': 1107, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_34a54ae93c', 'id': 'chatcmpl-BenyVRmTF1fOffraK97Ognt2hiehb', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='document-assistant' id='run--8506ce63-6a7d-4a35-92fa-c018463d7136-0' usage_metadata={'input_tokens': 1072, 'output_tokens': 35, 'total_tokens': 1107, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Transferring back to supervisor' additional_kwargs={} response_metadata={'__is_handoff_back': True} name='document-assistant' id='5e49f391-53a3-4ec9-9bdf-8bf57f58bd2c' tool_calls=[{'name': 'transfer_back_to_supervisor', 'args': {}, 'id': 'c036bbea-4e88-4f2b-80ff-a6503c64ebbd', 'type': 'tool_call'}]\n",
+      "content='Successfully transferred back to supervisor' name='transfer_back_to_supervisor' id='eda1c176-9234-4046-b3b5-f88986190afa' tool_call_id='c036bbea-4e88-4f2b-80ff-a6503c64ebbd'\n",
+      "content='The movie **\"Mission: Impossible - Dead Reckoning Part One\"** has been saved as a new document. If you need anything else, feel free to ask!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 35, 'prompt_tokens': 590, 'total_tokens': 625, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-BenyWM8XFMZh1nwjpohMVQp54FANr', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='supervisor' id='run--342b7648-d8e0-4c25-8cbe-e0f185f3844b-0' usage_metadata={'input_tokens': 590, 'output_tokens': 35, 'total_tokens': 625, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='What is the most recent Lord of the Rings movie?' additional_kwargs={} response_metadata={} id='2bdc8aa7-1b55-4492-a5d9-ade149f3f6b1'\n",
+      "content='' additional_kwargs={'tool_calls': [{'id': 'call_Lll70ICsiVDEoUtTxUlj3BZY', 'function': {'arguments': '{}', 'name': 'transfer_to_movie-discovery-assistant'}, 'type': 'function'}], 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 15, 'prompt_tokens': 646, 'total_tokens': 661, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-BenzVMFCN1J6JOTZsaKZwU7buKNn9', 'service_tier': 'default', 'finish_reason': 'tool_calls', 'logprobs': None} name='supervisor' id='run--9a07baff-9da0-40de-b496-a2ee947c6203-0' tool_calls=[{'name': 'transfer_to_movie-discovery-assistant', 'args': {}, 'id': 'call_Lll70ICsiVDEoUtTxUlj3BZY', 'type': 'tool_call'}] usage_metadata={'input_tokens': 646, 'output_tokens': 15, 'total_tokens': 661, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Successfully transferred to movie-discovery-assistant' name='transfer_to_movie-discovery-assistant' id='b819380c-ff8b-459d-908a-52a43cd13728' tool_call_id='call_Lll70ICsiVDEoUtTxUlj3BZY'\n",
+      "content='The most recent \"Lord of the Rings\" movie is **\"The Lord of the Rings: The War of the Rohirrim,\"** which is set to be released on **December 5, 2024**.\\n\\n### Overview:\\nThe film tells the story of Helm Hammerhand, the King of Rohan, who faces a sudden attack by Wulf, a clever and traitorous lord seeking vengeance for the death of his father. The people of Rohan must make a daring last stand in the ancient stronghold of the Hornburg.\\n\\n### Details:\\n- **Release Date:** December 5, 2024\\n- **Genres:** Animation, Fantasy, Adventure\\n- **Poster:**\\n![The Lord of the Rings: The War of the Rohirrim](https://image.tmdb.org/t/p/w500/cXzCOx1hUuU9CfmiEv6rXjb6EqU.jpg)\\n\\nIf you need more information or details about the previous movies, let me know!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 205, 'prompt_tokens': 1985, 'total_tokens': 2190, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_34a54ae93c', 'id': 'chatcmpl-BenzYWVrgOvmOyCDAGXMM6sh9GKYT', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='movie-discovery-assistant' id='run--5b0dedc3-d2f7-415d-af2a-0883723ce5bf-0' usage_metadata={'input_tokens': 1985, 'output_tokens': 205, 'total_tokens': 2190, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Transferring back to supervisor' additional_kwargs={} response_metadata={'__is_handoff_back': True} name='movie-discovery-assistant' id='fcf64c3f-33c0-40ac-b9a3-cbe511b2d75e' tool_calls=[{'name': 'transfer_back_to_supervisor', 'args': {}, 'id': 'e0f230c3-8d2e-4357-a638-c66acd7f8e9a', 'type': 'tool_call'}]\n",
+      "content='Successfully transferred back to supervisor' name='transfer_back_to_supervisor' id='3a3014c3-e10c-4930-a8b9-22e006e63c1f' tool_call_id='e0f230c3-8d2e-4357-a638-c66acd7f8e9a'\n",
+      "content='The most recent \"Lord of the Rings\" movie is **\"The Lord of the Rings: The War of the Rohirrim,\"** which is set to be released on **December 5, 2024**. If you need more information or details about the previous movies, feel free to ask!' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 63, 'prompt_tokens': 950, 'total_tokens': 1013, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08-06', 'system_fingerprint': 'fp_07871e2ad8', 'id': 'chatcmpl-Benzb0mbb4gkmuHXOOM3E6KU6OwEQ', 'service_tier': 'default', 'finish_reason': 'stop', 'logprobs': None} name='supervisor' id='run--14d37f0d-99d3-4951-9be8-de774dda5207-0' usage_metadata={'input_tokens': 950, 'output_tokens': 63, 'total_tokens': 1013, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}}\n",
+      "content='Save that movie as a new document' additional_kwargs={} response_metadata={} id='c7aae495-729b-48b0-bda5-77f15b1265ff'\n",
+      "content='' additional_kwargs={'tool_calls': [{'id': 'call_epDEtDegbDAOCwNvOfiovYPE', 'function': {'arguments': '{}', 'name': 'transfer_to_document-assistant'}, 'type': 'function'}], 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 13, 'prompt_tokens': 1030, 'total_tokens': 1043, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-2024-08

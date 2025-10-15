@@ -1,0 +1,8 @@
+Django>=5.0,<6.0
+jupyter
+langchain-ollama>=0.1.0
+langgraph
+langgraph-supervisor
+python-decouple
+permit
+httpx
